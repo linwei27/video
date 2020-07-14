@@ -27,10 +27,10 @@ import java.util.UUID;
 public class Videos {
 
     //视频文件路径：
-    public static String videoPath = "D:/test/video";
+//    public static String videoPath = "D:/test/video";
 
     //存放截取视频某一帧的图片
-    public static String videoFramesPath = "D:/test/img/";
+//    public static String videoFramesPath = "D:/test/img/";
 
     /**
      * 将frame转换为bufferedImage对象
@@ -79,7 +79,7 @@ public class Videos {
 //            String duration = ftp / fFmpegFrameGrabber.getFrameRate() / 60 + "";
             String duration = ftp / fFmpegFrameGrabber.getFrameRate() + "";
 
-            System.out.println("时长 " + duration);
+            //System.out.println("时长 " + duration);
 
             //放入json对象
             object.put("duration", duration);
