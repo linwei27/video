@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ public class Videos {
     @ResponseBody
     public String VideoProcessing(
             @RequestParam(value = "path", defaultValue = "") String path,
-            @RequestParam(value = "frames", defaultValue = "") String frames
+            @RequestParam(value = "frames", defaultValue = "10") String frames
     ) {
 
         JSONObject object = new JSONObject();
@@ -94,18 +95,22 @@ public class Videos {
                     //获取项目路径
                     String userdir = System.getProperty("user.dir");
 
-                    //获取年月日
-                    String currentDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                    //获取年月
+                    String yearMonth = new SimpleDateFormat("yyyyMM").format(new Date());
+
+                    //获取日
+                    Calendar now = Calendar.getInstance();
+                    String day = now.get(Calendar.DAY_OF_MONTH) + "";
 
                     //创建文件夹
-                    File file = new File(userdir + "/" + currentDate);
+                    File file = new File(userdir + "/" + yearMonth + "/" + day);
 
                     if (!file.exists() && !file.isDirectory()) {
-                        file.mkdir();
+                        file.mkdirs();
                     }
 
                     //文件绝对路径+名字
-                    String fileName = userdir + "/" + currentDate + "/" + UUID.randomUUID().toString() + "_" + flag + ".jpg";
+                    String fileName = userdir + "/" + yearMonth + "/" + day + "/" + UUID.randomUUID().toString() + "_" + flag + ".jpg";
 
                     //文件储存对象
                     File outPut = new File(fileName);
@@ -129,11 +134,16 @@ public class Videos {
             }
             fFmpegFrameGrabber.stop();
             fFmpegFrameGrabber.close();
-        } catch (Exception E) {
-            E.printStackTrace();
+
+            //正常返回结果
+            return object.toJSONString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //返回异常信息
+            return JSONObject.toJSONString(e.getMessage());
         }
 
-        return object.toJSONString();
 
     }
 
